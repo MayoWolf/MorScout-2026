@@ -6,15 +6,22 @@ function HomePage({ onNavigate }) {
   const [loading, setLoading] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(localStorage.getItem("selectedEvent") || "");
   const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function loadEvents() {
       try {
         setLoading(true);
+        setError("");
         const data = await fetchEvents(2026);
-        setEvents(data.sort((a, b) => new Date(a.start_date) - new Date(b.start_date)));
+        if (!data || data.length === 0) {
+          setError("No events found for 2026.");
+        } else {
+          setEvents(data.sort((a, b) => new Date(a.start_date) - new Date(b.start_date)));
+        }
       } catch (e) {
         console.error(e);
+        setError(e.message || "Failed to load events.");
       } finally {
         setLoading(false);
       }
@@ -57,6 +64,7 @@ function HomePage({ onNavigate }) {
             ))}
           </select>
         </label>
+        {error && <p style={{ fontSize: '0.8rem', color: '#ff4d4d', margin: '0.5rem 0 0' }}>⚠️ {error}</p>}
         {status && <p style={{ fontSize: '0.8rem', color: 'var(--accent)', margin: '0.5rem 0 0' }}>{status}</p>}
       </div>
 
