@@ -47,31 +47,32 @@ const scorePairs = [
 function MatchScoutPage() {
   const [form, setForm] = useState(initialState);
   const [status, setStatus] = useState("");
+  const [view, setView] = useState("list"); // "list" or "form"
+  const [matches, setMatches] = useState([]);
 
-  // TBA Auto-population logic
   useEffect(() => {
     const scheduleRaw = localStorage.getItem("matchSchedule");
-    if (!scheduleRaw || !form.matchNumber) return;
-
-    try {
-      const matches = JSON.parse(scheduleRaw);
-      // Look for qualifier match matching the number (qm)
-      const match = matches.find(m => m.comp_level === "qm" && m.match_number === Number(form.matchNumber));
-      
-      if (match) {
-        const color = form.alliance.toLowerCase(); // "red" or "blue"
-        const stationIdx = Number(form.station) - 1; // 0, 1, 2
-        const teamKey = match.alliances[color].team_keys[stationIdx];
-        
-        if (teamKey) {
-          const teamNum = teamKey.replace("frc", "");
-          setForm(prev => ({ ...prev, team: teamNum }));
-        }
+    if (scheduleRaw) {
+      try {
+        const data = JSON.parse(scheduleRaw);
+        setMatches(data.filter(m => m.comp_level === "qm").sort((a, b) => a.match_number - b.match_number));
+      } catch (e) {
+        console.error("Schedule parse error", e);
       }
-    } catch (e) {
-      console.error("Auto-pop error:", e);
     }
-  }, [form.matchNumber, form.alliance, form.station]);
+  }, []);
+
+  function startScouting(matchNum, alliance, station, teamNum) {
+    setForm({
+      ...initialState,
+      matchNumber: matchNum,
+      alliance: alliance,
+      station: station,
+      team: teamNum.replace("frc", "")
+    });
+    setView("form");
+    window.scrollTo(0, 0);
+  }
 
   function updateField(event) {
     const { name, value } = event.target;
@@ -106,15 +107,60 @@ function MatchScoutPage() {
     try {
       await submitMatchScout(form);
       setStatus("Saved to Google Sheets.");
-      setForm(initialState);
+      // Small delay then back to list
+      setTimeout(() => {
+        setView("list");
+        setStatus("");
+        setForm(initialState);
+      }, 1500);
     } catch (error) {
       setStatus(`Error: ${error.message}`);
     }
   }
 
+  if (view === "list") {
+    return (
+      <div className="match-list-view">
+        <h2 style={{ marginBottom: '1.5rem' }}>Select Match</h2>
+        {matches.length === 0 ? (
+          <div className="form" style={{ textAlign: 'center', color: 'var(--muted)' }}>
+            <p>No schedule found. Select an event on the Home page first.</p>
+          </div>
+        ) : (
+          <div style={{ display: 'grid', gap: '1rem' }}>
+            {matches.map(m => (
+              <div key={m.key} className="match-card">
+                <div className="match-num">QM {m.match_number}</div>
+                <div className="alliance-group red">
+                  {m.alliances.red.team_keys.map((team, i) => (
+                    <button key={team} onClick={() => startScouting(m.match_number, "Red", String(i + 1), team)}>
+                      {team.replace("frc", "")}
+                    </button>
+                  ))}
+                </div>
+                <div className="alliance-group blue">
+                  {m.alliances.blue.team_keys.map((team, i) => (
+                    <button key={team} onClick={() => startScouting(m.match_number, "Blue", String(i + 1), team)}>
+                      {team.replace("frc", "")}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <form className="form" onSubmit={onSubmit}>
-      <h2>Match Scout - REBUILT 2026</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h2>Match Scout - REBUILT</h2>
+        <button type="button" className="nav-item" style={{ background: 'var(--glass-bright)', padding: '0.5rem 1rem' }} onClick={() => setView("list")}>
+          ✕ Cancel
+        </button>
+      </div>
 
       <div className="inline-grid">
         <label>
@@ -124,29 +170,22 @@ function MatchScoutPage() {
 
         <label>
           Match Number
-          <input name="matchNumber" value={form.matchNumber} onChange={updateField} required />
+          <input name="matchNumber" value={form.matchNumber} readOnly style={{ opacity: 0.7 }} />
         </label>
 
         <label>
           Team Number
-          <input name="team" value={form.team} onChange={updateField} required />
+          <input name="team" value={form.team} readOnly style={{ opacity: 0.7 }} />
         </label>
 
         <label>
           Alliance
-          <select name="alliance" value={form.alliance} onChange={updateField}>
-            <option>Red</option>
-            <option>Blue</option>
-          </select>
+          <input name="alliance" value={form.alliance} readOnly style={{ opacity: 0.7 }} />
         </label>
 
         <label>
           Station
-          <select name="station" value={form.station} onChange={updateField}>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-          </select>
+          <input name="station" value={form.station} readOnly style={{ opacity: 0.7 }} />
         </label>
       </div>
 

@@ -318,6 +318,58 @@ thead td {
   animation: fadeIn 0.3s ease;
 }
 
+/* Match Selection View */
+.match-card {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.match-num {
+  font-weight: 800;
+  font-size: 0.8rem;
+  color: var(--muted);
+  width: 40px;
+  text-transform: uppercase;
+}
+
+.alliance-group {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+  background: rgba(0,0,0,0.2);
+  padding: 0.4rem;
+  border-radius: var(--radius-sm);
+}
+
+.alliance-group.red { border: 1px solid rgba(255, 59, 48, 0.3); }
+.alliance-group.blue { border: 1px solid rgba(0, 122, 255, 0.3); }
+
+.alliance-group button {
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 0.2rem;
+  color: white;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: transform 0.2s ease;
+}
+
+.red button { background: linear-gradient(180deg, #ff453a 0%, #ff3b30 100%); }
+.blue button { background: linear-gradient(180deg, #0a84ff 0%, #007aff 100%); }
+
+.alliance-group button:active {
+  transform: scale(0.9);
+  filter: brightness(1.2);
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
