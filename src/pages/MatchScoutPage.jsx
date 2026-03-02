@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { submitMatchScout } from "../lib/api";
 
 const initialState = {
@@ -47,6 +47,31 @@ const scorePairs = [
 function MatchScoutPage() {
   const [form, setForm] = useState(initialState);
   const [status, setStatus] = useState("");
+
+  // TBA Auto-population logic
+  useEffect(() => {
+    const scheduleRaw = localStorage.getItem("matchSchedule");
+    if (!scheduleRaw || !form.matchNumber) return;
+
+    try {
+      const matches = JSON.parse(scheduleRaw);
+      // Look for qualifier match matching the number (qm)
+      const match = matches.find(m => m.comp_level === "qm" && m.match_number === Number(form.matchNumber));
+      
+      if (match) {
+        const color = form.alliance.toLowerCase(); // "red" or "blue"
+        const stationIdx = Number(form.station) - 1; // 0, 1, 2
+        const teamKey = match.alliances[color].team_keys[stationIdx];
+        
+        if (teamKey) {
+          const teamNum = teamKey.replace("frc", "");
+          setForm(prev => ({ ...prev, team: teamNum }));
+        }
+      }
+    } catch (e) {
+      console.error("Auto-pop error:", e);
+    }
+  }, [form.matchNumber, form.alliance, form.station]);
 
   function updateField(event) {
     const { name, value } = event.target;

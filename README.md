@@ -5,7 +5,7 @@ MorTorq FRC scouting app built with React and deployed on Netlify.
 ## Stack
 
 - React + Vite frontend
-- Netlify Functions API
+- Netlify Functions (Google Sheets API)
 - Google Sheets as data storage
 
 ## Local setup
@@ -21,9 +21,8 @@ npm install
 3. Create these sheet tabs in your Google Sheet:
 - `PitScouting`
 - `MatchScouting`
-- `Rankings` (optional if you only use computed rankings page)
 
-4. Share the sheet with your Google service account email (Editor).
+4. Share the sheet with your Google service account email as **Editor**.
 
 5. Run locally:
 
@@ -31,83 +30,65 @@ npm install
 npm run dev
 ```
 
-## Netlify deploy
+> Note: To test the API functions locally, you may need the [Netlify CLI](https://docs.netlify.com/cli/get-started/) installed. Run `netlify dev` instead of `npm run dev` to start both the frontend and the local functions server.
 
-1. Push this repo to GitHub (public).
-2. In Netlify, import the GitHub repo.
-3. Build settings are already defined in `netlify.toml`.
-4. Add environment variables in Netlify site settings:
-- `GOOGLE_SHEETS_ID`
-- `GOOGLE_SERVICE_ACCOUNT_EMAIL`
-- `GOOGLE_PRIVATE_KEY`
+## Google Sheets setup
+
+Detailed instructions for setting up the Google Sheet and Service Account can be found in [SETUP_GOOGLE_SHEETS.md](./SETUP_GOOGLE_SHEETS.md).
 
 ## Data columns
 
+Ensure your Google Sheet tabs have these exact columns in row 1:
+
 ### PitScouting
-- Timestamp
-- Scout
-- Team
-- Drivetrain
-- AutoSummary
-- TeleopSummary
-- Endgame
-- Reliability
-- Comments
+1. Timestamp
+2. Scout
+3. Team
+4. Drivetrain
+5. CanCrossBumps
+6. CanUnderTrench
+7. IntakeType
+8. ScoringMechanisms
+9. ClimbLevel
+10. AutoSummary
+11. TeleopSummary
+12. Reliability
+13. Comments
 
 ### MatchScouting
-- Timestamp
-- Scout
-- MatchNumber
-- Alliance
-- Team
-- Station
-- AutoCoralL1Scored
-- AutoCoralL1Attempted
-- AutoCoralL2Scored
-- AutoCoralL2Attempted
-- AutoCoralL3Scored
-- AutoCoralL3Attempted
-- AutoCoralL4Scored
-- AutoCoralL4Attempted
-- LeftStartingZone
-- StartingPosition
-- AutoPathType
-- AutoInterference
-- AutoMultiPiece
-- TeleopCoralL1Scored
-- TeleopCoralL1Attempted
-- TeleopCoralL2Scored
-- TeleopCoralL2Attempted
-- TeleopCoralL3Scored
-- TeleopCoralL3Attempted
-- TeleopCoralL4Scored
-- TeleopCoralL4Attempted
-- AvgCycleTimeSec
-- DropsFumbles
-- PreferredScoringLocation
-- FieldAwareness
-- AdaptsWhenGoalsDeactivate
-- DriverStationComms
-- PartnerCollisions
-- PlayedDefense
-- DefenseTimeSec
-- DefenseEffectiveness
-- ScoredWhileDefended
-- PushedEasily
-- DrewFouls
-- ClimbLevelAttempted
-- ClimbSuccess
-- ClimbAttemptTiming
-- ClimbTimeSec
-- ClimbFailure
-- ClimbComments
-- RobotSpeed
-- Breakdown
-- DeadRobot
-- Brownout
-- NoShow
-- DQ
-- RepairTimeMin
-- ReliabilityScore
-- Reliability
-- GeneralComments
+1. Timestamp
+2. Scout
+3. MatchNumber
+4. Alliance
+5. Team
+6. Station
+7. AutoFuelScored
+8. AutoFuelAttempted
+9. LeftStartingZone
+10. AutoTowerLevel1
+11. StartingPosition
+12. AutoPathType
+13. TeleopFuelScored
+14. TeleopFuelAttempted
+15. TeleopTowerLevel
+16. AvgCycleTimeSec
+17. DropsFumbles
+18. PreferredScoringLocation
+19. FieldAwareness
+20. DriverStationComms
+21. PlayedDefense
+22. DefenseTimeSec
+23. DefenseEffectiveness
+24. ScoredWhileDefended
+25. PushedEasily
+26. DrewFouls
+27. RobotSpeed
+28. Breakdown
+29. DeadRobot
+30. Brownout
+31. NoShow
+32. DQ
+33. RepairTimeMin
+34. ReliabilityScore
+35. Reliability
+36. GeneralComments

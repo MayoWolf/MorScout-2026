@@ -5,9 +5,8 @@
 Create a Google Sheet and add these tabs:
 - `PitScouting`
 - `MatchScouting`
-- `Rankings`
 
-Add header rows in row 1.
+Add header rows in row 1 with the exact column names specified in the README.
 
 ## 2. Create service account
 
