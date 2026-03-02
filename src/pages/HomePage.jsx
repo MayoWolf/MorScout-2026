@@ -8,25 +8,39 @@ function HomePage({ onNavigate }) {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    async function loadEvents() {
-      try {
-        setLoading(true);
-        setError("");
-        const data = await fetchEvents(2026);
-        if (!data || data.length === 0) {
-          setError("No events found for 2026.");
-        } else {
-          setEvents(data.sort((a, b) => new Date(a.start_date) - new Date(b.start_date)));
-        }
-      } catch (e) {
-        console.error(e);
-        setError(e.message || "Failed to load events.");
-      } finally {
-        setLoading(false);
+  const hasApiKey = !!import.meta.env.VITE_TBA_API_KEY;
+
+  async function loadEvents(year = 2026) {
+    try {
+      setLoading(true);
+      setError("");
+      
+      if (!hasApiKey) {
+        throw new Error("API Key (VITE_TBA_API_KEY) is missing in Netlify settings. Ensure you re-deployed after adding it.");
       }
+
+      const data = await fetchEvents(year);
+      
+      if (!data || data.length === 0) {
+        if (year === 2026) {
+          console.log("No 2026 events, trying 2025...");
+          loadEvents(2025); // Fallback to 2025 to test connection
+        } else {
+          setError(`No events found for ${year}.`);
+        }
+      } else {
+        setEvents(data.sort((a, b) => new Date(a.start_date) - new Date(b.start_date)));
+      }
+    } catch (e) {
+      console.error(e);
+      setError(e.message || "Failed to load events.");
+    } finally {
+      setLoading(false);
     }
-    if (events.length === 0) loadEvents();
+  }
+
+  useEffect(() => {
+    if (events.length === 0 && !error) loadEvents();
   }, []);
 
   async function onSelectEvent(e) {
@@ -53,18 +67,32 @@ function HomePage({ onNavigate }) {
     <section className="home-page" style={{ display: 'grid', gap: '2rem' }}>
       <div className="form" style={{ padding: '1.2rem' }}>
         <h3 style={{ fontSize: '0.9rem', marginBottom: '0.8rem' }}>📍 Competition Context</h3>
+        
         <label>
           Select Event
           <select value={selectedEvent} onChange={onSelectEvent} disabled={loading}>
             <option value="">{loading ? "Loading Events..." : "-- Choose Event --"}</option>
             {events.map(ev => (
               <option key={ev.key} value={ev.key}>
-                {ev.name} ({ev.city})
+                {ev.year} {ev.name} ({ev.city})
               </option>
             ))}
           </select>
         </label>
-        {error && <p style={{ fontSize: '0.8rem', color: '#ff4d4d', margin: '0.5rem 0 0' }}>⚠️ {error}</p>}
+
+        {error && (
+          <div style={{ marginTop: '1rem', display: 'grid', gap: '0.5rem' }}>
+            <p style={{ fontSize: '0.8rem', color: '#ff4d4d' }}>⚠️ {error}</p>
+            <button 
+              className="primary-button" 
+              style={{ padding: '0.5rem', fontSize: '0.8rem' }} 
+              onClick={() => loadEvents()}
+            >
+              Retry Load
+            </button>
+          </div>
+        )}
+        
         {status && <p style={{ fontSize: '0.8rem', color: 'var(--accent)', margin: '0.5rem 0 0' }}>{status}</p>}
       </div>
 
