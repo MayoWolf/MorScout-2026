@@ -7,10 +7,10 @@ import RankingsPage from "./pages/RankingsPage";
 const TABS = ["home", "pit", "match", "rankings"];
 
 const TAB_LABELS = {
-  home: "Home",
-  pit: "Pit Scout",
-  match: "Match Scout",
-  rankings: "Rankings"
+  home: { label: "Home", icon: "🏠" },
+  pit: { label: "Pit Scout", icon: "🛠️" },
+  match: { label: "Match Scout", icon: "📊" },
+  rankings: { label: "Rankings", icon: "🏆" }
 };
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
     <div className="app-shell">
       <header className="top-bar">
         <h1>MorScout 2026</h1>
-        <p>Team MorTorq</p>
+        <p>REBUILT</p>
       </header>
 
       <main className="page-content">{page}</main>
@@ -40,7 +40,8 @@ function App() {
             className={tab === activeTab ? "nav-item active" : "nav-item"}
             onClick={() => setActiveTab(tab)}
           >
-            {TAB_LABELS[tab]}
+            <span style={{ fontSize: '1.2rem' }}>{TAB_LABELS[tab].icon}</span>
+            <span>{TAB_LABELS[tab].label}</span>
           </button>
         ))}
       </nav>
