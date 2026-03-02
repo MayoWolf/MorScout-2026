@@ -1,12 +1,10 @@
-const TBA_BASE = "https://www.thebluealliance.com/api/v3";
-const TBA_KEY = import.meta.env.VITE_TBA_API_KEY;
-
 async function callTBA(path) {
-  if (!TBA_KEY) throw new Error("VITE_TBA_API_KEY is not configured.");
-  const response = await fetch(`${TBA_BASE}${path}`, {
-    headers: { "X-TBA-Auth-Key": TBA_KEY }
-  });
-  if (!response.ok) throw new Error("TBA Request failed");
+  // Call our own Netlify Function proxy instead of TBA directly
+  const response = await fetch(`/api/tba-proxy?path=${encodeURIComponent(path)}`);
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data.error || "TBA Proxy Request failed");
+  }
   return response.json();
 }
 
