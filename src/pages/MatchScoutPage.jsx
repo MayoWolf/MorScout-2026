@@ -11,7 +11,7 @@ const initialState = {
   autoFuelAttempted: 0,
   leftStartingZone: "No",
   startingPosition: "Center",
-  autoPathType: "Center",
+  autoPathType: "Fuel",
   autoTowerLevel1: "No",
   teleopFuelScored: 0,
   teleopFuelAttempted: 0,
@@ -190,13 +190,13 @@ function MatchScoutPage() {
       </div>
 
       <section className="counter-panel">
-        <h3>Auto Period</h3>
-        <h4>Scoring Elements (FUEL)</h4>
+        <h3>AUTO</h3>
+        <h4>Scoring in the active HUB (FUEL)</h4>
         <CounterPair label="FUEL" scored={form.autoFuelScored} attempted={form.autoFuelAttempted} onMinusScored={() => updateNumber("autoFuelScored", -1)} onPlusScored={() => updateNumber("autoFuelScored", 1)} onMinusAttempted={() => updateNumber("autoFuelAttempted", -1)} onPlusAttempted={() => updateNumber("autoFuelAttempted", 1)} />
 
         <div className="inline-grid">
           <label>
-            Left Starting Zone?
+            Left ROBOT STARTING LINE?
             <select name="leftStartingZone" value={form.leftStartingZone} onChange={updateField}>
               <option>No</option>
               <option>Yes</option>
@@ -204,7 +204,7 @@ function MatchScoutPage() {
           </label>
 
           <label>
-            TOWER Level 1?
+            Reached TOWER LEVEL 1?
             <select name="autoTowerLevel1" value={form.autoTowerLevel1} onChange={updateField}>
               <option>No</option>
               <option>Yes</option>
@@ -212,7 +212,7 @@ function MatchScoutPage() {
           </label>
 
           <label>
-            Starting Position
+            Starting Position on Line
             <select name="startingPosition" value={form.startingPosition} onChange={updateField}>
               <option>Left</option>
               <option>Center</option>
@@ -221,10 +221,11 @@ function MatchScoutPage() {
           </label>
 
           <label>
-            Auto Path Type
+            AUTO Objective
             <select name="autoPathType" value={form.autoPathType} onChange={updateField}>
-              <option>Standard</option>
-              <option>Custom</option>
+              <option>Fuel</option>
+              <option>Tower</option>
+              <option>Both</option>
               <option>None</option>
             </select>
           </label>
@@ -232,8 +233,8 @@ function MatchScoutPage() {
       </section>
 
       <section className="counter-panel">
-        <h3>Teleop Period</h3>
-        <h4>Scoring Elements (FUEL)</h4>
+        <h3>TELEOP</h3>
+        <h4>Count FUEL scored while the HUB is active</h4>
         <CounterPair label="FUEL" scored={form.teleopFuelScored} attempted={form.teleopFuelAttempted} onMinusScored={() => updateNumber("teleopFuelScored", -1)} onPlusScored={() => updateNumber("teleopFuelScored", 1)} onMinusAttempted={() => updateNumber("teleopFuelAttempted", -1)} onPlusAttempted={() => updateNumber("teleopFuelAttempted", 1)} />
 
         <div className="inline-grid">
@@ -247,22 +248,14 @@ function MatchScoutPage() {
             <input type="number" min="0" name="dropsFumbles" value={form.dropsFumbles} onChange={updateDirectNumber} />
           </label>
 
-          <label>
-            Preferred Scoring
-            <select name="preferredScoringLocation" value={form.preferredScoringLocation} onChange={updateField}>
-              <option>High HUB</option>
-              <option>Low HUB</option>
-              <option>Mixed</option>
-            </select>
-          </label>
         </div>
       </section>
 
       <section className="counter-panel">
-        <h3>Endgame + Defense</h3>
+        <h3>END GAME + Defense</h3>
         <div className="inline-grid">
           <label>
-            TOWER Level
+            Final TOWER LEVEL
             <select name="teleopTowerLevel" value={form.teleopTowerLevel} onChange={updateField}>
               <option>None</option>
               <option>Level 1</option>
@@ -272,7 +265,7 @@ function MatchScoutPage() {
           </label>
 
           <label>
-            Field Awareness (1-5)
+            SHIFT / HUB Awareness (1-5)
             <select name="fieldAwareness" value={form.fieldAwareness} onChange={updateField}>
               <option>1</option>
               <option>2</option>
