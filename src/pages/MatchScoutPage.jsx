@@ -8,13 +8,13 @@ const initialState = {
   team: "",
   station: "1",
   autoFuelScored: 0,
-  autoFuelAttempted: 0,
+  autoFuelMissed: 0,
   leftStartingZone: "No",
   startingPosition: "Center",
   autoPathType: "Fuel",
   autoTowerLevel1: "No",
   teleopFuelScored: 0,
-  teleopFuelAttempted: 0,
+  teleopFuelMissed: 0,
   teleopTowerLevel: "None",
   avgCycleTimeSec: 0,
   dropsFumbles: 0,
@@ -38,11 +38,6 @@ const initialState = {
   reliability: "No issues",
   generalComments: ""
 };
-
-const scorePairs = [
-  ["autoFuelScored", "autoFuelAttempted", "Auto FUEL"],
-  ["teleopFuelScored", "teleopFuelAttempted", "Teleop FUEL"]
-];
 
 function MatchScoutPage() {
   const [form, setForm] = useState(initialState);
@@ -94,13 +89,6 @@ function MatchScoutPage() {
 
   async function onSubmit(event) {
     event.preventDefault();
-
-    for (const [scoredKey, attemptedKey, label] of scorePairs) {
-      if (Number(form[scoredKey]) > Number(form[attemptedKey])) {
-        setStatus(`${label}: scored cannot exceed attempted.`);
-        return;
-      }
-    }
 
     setStatus("Saving...");
 
@@ -192,7 +180,7 @@ function MatchScoutPage() {
       <section className="counter-panel">
         <h3>AUTO</h3>
         <h4>Scoring in the active HUB (FUEL)</h4>
-        <CounterPair label="FUEL" scored={form.autoFuelScored} attempted={form.autoFuelAttempted} onMinusScored={() => updateNumber("autoFuelScored", -1)} onPlusScored={() => updateNumber("autoFuelScored", 1)} onMinusAttempted={() => updateNumber("autoFuelAttempted", -1)} onPlusAttempted={() => updateNumber("autoFuelAttempted", 1)} />
+        <CounterPair label="FUEL" scored={form.autoFuelScored} missed={form.autoFuelMissed} onMinusScored={() => updateNumber("autoFuelScored", -1)} onPlusScored={() => updateNumber("autoFuelScored", 1)} onMinusMissed={() => updateNumber("autoFuelMissed", -1)} onPlusMissed={() => updateNumber("autoFuelMissed", 1)} />
 
         <div className="inline-grid">
           <label>
@@ -235,7 +223,7 @@ function MatchScoutPage() {
       <section className="counter-panel">
         <h3>TELEOP</h3>
         <h4>Count FUEL scored while the HUB is active</h4>
-        <CounterPair label="FUEL" scored={form.teleopFuelScored} attempted={form.teleopFuelAttempted} onMinusScored={() => updateNumber("teleopFuelScored", -1)} onPlusScored={() => updateNumber("teleopFuelScored", 1)} onMinusAttempted={() => updateNumber("teleopFuelAttempted", -1)} onPlusAttempted={() => updateNumber("teleopFuelAttempted", 1)} />
+        <CounterPair label="FUEL" scored={form.teleopFuelScored} missed={form.teleopFuelMissed} onMinusScored={() => updateNumber("teleopFuelScored", -1)} onPlusScored={() => updateNumber("teleopFuelScored", 1)} onMinusMissed={() => updateNumber("teleopFuelMissed", -1)} onPlusMissed={() => updateNumber("teleopFuelMissed", 1)} />
 
         <div className="inline-grid">
           <label>
@@ -374,11 +362,11 @@ function Counter({ value, onMinus, onPlus }) {
 function CounterPair({
   label,
   scored,
-  attempted,
+  missed,
   onMinusScored,
   onPlusScored,
-  onMinusAttempted,
-  onPlusAttempted
+  onMinusMissed,
+  onPlusMissed
 }) {
   return (
     <div className="counter-pair">
@@ -388,8 +376,10 @@ function CounterPair({
         <Counter value={scored} onMinus={onMinusScored} onPlus={onPlusScored} />
       </div>
       <div>
-        <span>Attempted</span>
-        <Counter value={attempted} onMinus={onMinusAttempted} onPlus={onPlusAttempted} />
+        <span>
+          Missed <span style={{ opacity: 0.55 }}>(Approx)</span>
+        </span>
+        <Counter value={missed} onMinus={onMinusMissed} onPlus={onPlusMissed} />
       </div>
     </div>
   );
