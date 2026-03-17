@@ -372,7 +372,9 @@ function CounterPair({
     <div className="counter-pair">
       <p>{label}</p>
       <div>
-        <span>Scored</span>
+        <span>
+          Scored <span style={{ opacity: 0.55 }}>(Approx)</span>
+        </span>
         <Counter value={scored} onMinus={onMinusScored} onPlus={onPlusScored} />
       </div>
       <div>
