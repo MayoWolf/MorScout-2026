@@ -81,6 +81,11 @@ function MatchScoutPage() {
     });
   }
 
+  function setCounterValue(name, value) {
+    const num = Math.max(0, Number(value) || 0);
+    setForm((prev) => ({ ...prev, [name]: num }));
+  }
+
   function updateDirectNumber(event) {
     const { name, value } = event.target;
     const num = Math.max(0, Number(value) || 0);
@@ -180,7 +185,7 @@ function MatchScoutPage() {
       <section className="counter-panel">
         <h3>AUTO</h3>
         <h4>Scoring in the active HUB (FUEL)</h4>
-        <CounterPair label="FUEL" scored={form.autoFuelScored} missed={form.autoFuelMissed} onMinusScored={() => updateNumber("autoFuelScored", -1)} onPlusScored={() => updateNumber("autoFuelScored", 1)} onMinusMissed={() => updateNumber("autoFuelMissed", -1)} onPlusMissed={() => updateNumber("autoFuelMissed", 1)} />
+        <CounterPair label="FUEL" scoredName="autoFuelScored" scored={form.autoFuelScored} missedName="autoFuelMissed" missed={form.autoFuelMissed} updateNumber={updateNumber} setCounterValue={setCounterValue} onMinusScored={() => updateNumber("autoFuelScored", -1)} onPlusScored={() => updateNumber("autoFuelScored", 1)} onMinusMissed={() => updateNumber("autoFuelMissed", -1)} onPlusMissed={() => updateNumber("autoFuelMissed", 1)} />
 
         <div className="inline-grid">
           <label>
@@ -223,7 +228,7 @@ function MatchScoutPage() {
       <section className="counter-panel">
         <h3>TELEOP</h3>
         <h4>Count FUEL scored while the HUB is active</h4>
-        <CounterPair label="FUEL" scored={form.teleopFuelScored} missed={form.teleopFuelMissed} onMinusScored={() => updateNumber("teleopFuelScored", -1)} onPlusScored={() => updateNumber("teleopFuelScored", 1)} onMinusMissed={() => updateNumber("teleopFuelMissed", -1)} onPlusMissed={() => updateNumber("teleopFuelMissed", 1)} />
+        <CounterPair label="FUEL" scoredName="teleopFuelScored" scored={form.teleopFuelScored} missedName="teleopFuelMissed" missed={form.teleopFuelMissed} updateNumber={updateNumber} setCounterValue={setCounterValue} onMinusScored={() => updateNumber("teleopFuelScored", -1)} onPlusScored={() => updateNumber("teleopFuelScored", 1)} onMinusMissed={() => updateNumber("teleopFuelMissed", -1)} onPlusMissed={() => updateNumber("teleopFuelMissed", 1)} />
 
         <div className="inline-grid">
           <label>
@@ -349,20 +354,33 @@ function MatchScoutPage() {
   );
 }
 
-function Counter({ value, onMinus, onPlus }) {
+function Counter({ value, onMinusTen, onMinus, onChange, onPlus, onPlusTen }) {
   return (
     <div className="counter-row">
+      <button type="button" onClick={onMinusTen}>-10</button>
       <button type="button" onClick={onMinus}>-</button>
-      <strong>{value}</strong>
+      <input
+        className="counter-input"
+        type="number"
+        min="0"
+        inputMode="numeric"
+        value={value}
+        onChange={onChange}
+      />
       <button type="button" onClick={onPlus}>+</button>
+      <button type="button" onClick={onPlusTen}>+10</button>
     </div>
   );
 }
 
 function CounterPair({
   label,
+  scoredName,
   scored,
+  missedName,
   missed,
+  updateNumber,
+  setCounterValue,
   onMinusScored,
   onPlusScored,
   onMinusMissed,
@@ -375,13 +393,27 @@ function CounterPair({
         <span>
           Scored <span style={{ opacity: 0.55 }}>(Approx)</span>
         </span>
-        <Counter value={scored} onMinus={onMinusScored} onPlus={onPlusScored} />
+        <Counter
+          value={scored}
+          onMinusTen={() => updateNumber(scoredName, -10)}
+          onMinus={onMinusScored}
+          onChange={(event) => setCounterValue(scoredName, event.target.value)}
+          onPlus={onPlusScored}
+          onPlusTen={() => updateNumber(scoredName, 10)}
+        />
       </div>
       <div>
         <span>
           Missed <span style={{ opacity: 0.55 }}>(Approx)</span>
         </span>
-        <Counter value={missed} onMinus={onMinusMissed} onPlus={onPlusMissed} />
+        <Counter
+          value={missed}
+          onMinusTen={() => updateNumber(missedName, -10)}
+          onMinus={onMinusMissed}
+          onChange={(event) => setCounterValue(missedName, event.target.value)}
+          onPlus={onPlusMissed}
+          onPlusTen={() => updateNumber(missedName, 10)}
+        />
       </div>
     </div>
   );

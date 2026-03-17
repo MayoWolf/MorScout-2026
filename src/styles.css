@@ -256,33 +256,44 @@ textarea:focus {
 }
 
 .counter-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 3.2rem 2.8rem minmax(3.6rem, 1fr) 2.8rem 3.2rem;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  gap: 0.5rem;
   background: rgba(0, 0, 0, 0.2);
   padding: 0.5rem;
-  border-radius: 100px;
+  border-radius: 999px;
   border: 1px solid var(--glass-border);
 }
 
 .counter-row button {
-  width: 2.8rem;
+  width: 100%;
   height: 2.8rem;
   border-radius: 50%;
   border: none;
   background: var(--glass-bright);
   color: #fff;
-  font-size: 1.4rem;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  font-weight: 700;
 }
 
 .counter-row button:active {
   transform: scale(0.85);
   background: var(--accent);
+}
+
+.counter-input {
+  min-width: 0;
+  height: 2.8rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 999px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.1rem;
 }
 
 .counter-pair {
