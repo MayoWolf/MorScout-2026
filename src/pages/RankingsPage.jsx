@@ -39,7 +39,7 @@ function aggregate(rows) {
 
   rows.forEach((row) => {
     const team = String(row[IDX.team] || "").trim();
-    if (!team || team.toLowerCase() === "team") return;
+    if (!team || !/^\d+$/.test(team)) return;
 
     if (!bucket.has(team)) {
       bucket.set(team, {
