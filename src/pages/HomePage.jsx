@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { fetchEvents, fetchEventMatches } from "../lib/api";
 
+const DEFAULT_EVENT_NAME = "2026 CA District Los Angeles Event";
+const DEFAULT_EVENT_CITY = "El Segundo";
+
 function HomePage({ onNavigate }) {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -43,8 +46,13 @@ function HomePage({ onNavigate }) {
     if (events.length === 0 && !error) loadEvents();
   }, []);
 
-  async function onSelectEvent(e) {
-    const key = e.target.value;
+  function findDefaultEvent(eventList) {
+    return eventList.find(
+      (event) => event.name === DEFAULT_EVENT_NAME && event.city === DEFAULT_EVENT_CITY
+    );
+  }
+
+  async function syncSelectedEvent(key) {
     setSelectedEvent(key);
     if (!key) {
       localStorage.removeItem("selectedEvent");
@@ -62,6 +70,19 @@ function HomePage({ onNavigate }) {
       setStatus("Error fetching schedule");
     }
   }
+
+  async function onSelectEvent(e) {
+    await syncSelectedEvent(e.target.value);
+  }
+
+  useEffect(() => {
+    if (selectedEvent || events.length === 0) return;
+
+    const defaultEvent = findDefaultEvent(events);
+    if (defaultEvent) {
+      syncSelectedEvent(defaultEvent.key);
+    }
+  }, [events, selectedEvent]);
 
   return (
     <section className="home-page" style={{ display: 'grid', gap: '2rem' }}>
