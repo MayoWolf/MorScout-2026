@@ -150,7 +150,7 @@ function MatchScoutPage() {
     <form className="form" onSubmit={onSubmit}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h2>Match Scout - REBUILT</h2>
-        <button type="button" className="nav-item" style={{ background: 'var(--glass-bright)', padding: '0.5rem 1rem' }} onClick={() => setView("list")}>
+        <button type="button" className="secondary-button" onClick={() => setView("list")}>
           ✕ Cancel
         </button>
       </div>
