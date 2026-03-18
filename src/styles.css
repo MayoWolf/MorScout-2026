@@ -17,6 +17,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
   color: var(--text);
@@ -85,6 +93,7 @@ h4 {
 }
 
 .app-shell {
+  width: 100%;
   max-width: 600px;
   margin: 0 auto;
   min-height: 100vh;
@@ -92,6 +101,7 @@ h4 {
   flex-direction: column;
   position: relative;
   z-index: 2;
+  overflow-x: clip;
 }
 
 .top-bar {
@@ -125,8 +135,11 @@ h4 {
 }
 
 .page-content {
+  width: 100%;
+  max-width: 100%;
   padding: 1.5rem 1rem 6rem;
   flex: 1;
+  overflow-x: clip;
 }
 
 .card-grid {
@@ -257,17 +270,20 @@ textarea:focus {
 
 .counter-row {
   display: grid;
-  grid-template-columns: 3.2rem 2.8rem minmax(3.6rem, 1fr) 2.8rem 3.2rem;
+  grid-template-columns: minmax(0, 3rem) minmax(0, 2.6rem) minmax(0, 1fr) minmax(0, 2.6rem) minmax(0, 3rem);
   align-items: center;
   gap: 0.5rem;
   background: rgba(0, 0, 0, 0.2);
   padding: 0.5rem;
   border-radius: 999px;
   border: 1px solid var(--glass-border);
+  width: 100%;
+  min-width: 0;
 }
 
 .counter-row button {
   width: 100%;
+  min-width: 0;
   height: 2.8rem;
   border-radius: 50%;
   border: none;
@@ -288,6 +304,7 @@ textarea:focus {
 
 .counter-input {
   min-width: 0;
+  width: 100%;
   height: 2.8rem;
   padding: 0.4rem 0.5rem;
   border-radius: 999px;
@@ -357,14 +374,19 @@ thead td {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
-  padding: 0.8rem 1rem calc(1rem + env(safe-area-inset-bottom));
+  width: min(100%, 600px);
+  padding-top: 0.8rem;
+  padding-right: max(1rem, env(safe-area-inset-right));
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+  padding-left: max(1rem, env(safe-area-inset-left));
   backdrop-filter: blur(30px) saturate(180%);
   background: rgba(9, 8, 6, 0.9);
   border-top: 1px solid var(--glass-border);
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
   z-index: 100;
 }
 
@@ -408,6 +430,8 @@ thead td {
   align-items: center;
   gap: 1rem;
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .match-num {
@@ -426,6 +450,7 @@ thead td {
   background: rgba(0,0,0,0.2);
   padding: 0.4rem;
   border-radius: var(--radius-sm);
+  min-width: 0;
 }
 
 .alliance-group.red { border: 1px solid rgba(255, 59, 48, 0.3); }
@@ -447,6 +472,32 @@ thead td {
 .alliance-group button:active {
   transform: scale(0.9);
   filter: brightness(1.2);
+}
+
+@media (max-width: 430px) {
+  .page-content {
+    padding-inline: 0.85rem;
+  }
+
+  .counter-row {
+    grid-template-columns: minmax(0, 2.7rem) minmax(0, 2.35rem) minmax(0, 1fr) minmax(0, 2.35rem) minmax(0, 2.7rem);
+    gap: 0.35rem;
+    padding: 0.4rem;
+  }
+
+  .counter-row button,
+  .counter-input {
+    height: 2.5rem;
+  }
+
+  .counter-row button {
+    font-size: 0.9rem;
+  }
+
+  .match-card {
+    padding: 0.85rem;
+    gap: 0.7rem;
+  }
 }
 
 @keyframes fadeIn {
