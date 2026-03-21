@@ -1,9 +1,29 @@
 import { useState, useEffect } from "react";
 import { fetchEvents, fetchEventMatches } from "../lib/api";
 
-const DEFAULT_EVENT_NAME = "2026 CA District Los Angeles Event";
-const DEFAULT_EVENT_CITY = "El Segundo";
-const DEFAULT_EVENT_LABEL = `${DEFAULT_EVENT_NAME} (${DEFAULT_EVENT_CITY})`;
+const DEFAULT_EVENT_KEY = "2026calas";
+const DEFAULT_EVENT_CODE = "calas";
+const DEFAULT_EVENT_LABEL = "CA District Los Angeles Event";
+
+function formatEventLabel(event) {
+  if (!event) {
+    return DEFAULT_EVENT_LABEL;
+  }
+
+  return event.city ? `${event.name} (${event.city})` : event.name;
+}
+
+function isLosAngelesEvent(event) {
+  const key = String(event.key || "").toLowerCase();
+  const eventCode = String(event.event_code || "").toLowerCase();
+  const name = String(event.name || "").toLowerCase();
+
+  return (
+    key === DEFAULT_EVENT_KEY ||
+    eventCode === DEFAULT_EVENT_CODE ||
+    name.includes("district los angeles event")
+  );
+}
 
 function HomePage({ onNavigate }) {
   const [events, setEvents] = useState([]);
@@ -48,9 +68,7 @@ function HomePage({ onNavigate }) {
   }, []);
 
   function findDefaultEvent(eventList) {
-    return eventList.find(
-      (event) => event.name === DEFAULT_EVENT_NAME && event.city === DEFAULT_EVENT_CITY
-    );
+    return eventList.find(isLosAngelesEvent);
   }
 
   async function syncSelectedEvent(key) {
@@ -77,7 +95,7 @@ function HomePage({ onNavigate }) {
 
     const defaultEvent = findDefaultEvent(events);
     if (!defaultEvent) {
-      setError(`Could not find ${DEFAULT_EVENT_LABEL}.`);
+      setError(`Could not find ${DEFAULT_EVENT_LABEL} in TBA.`);
       return;
     }
 
@@ -86,6 +104,11 @@ function HomePage({ onNavigate }) {
     }
   }, [events, selectedEvent]);
 
+  const activeEvent =
+    events.find((event) => event.key === selectedEvent) ||
+    findDefaultEvent(events) ||
+    null;
+
   return (
     <section className="home-page" style={{ display: 'grid', gap: '2rem' }}>
       <div className="form" style={{ padding: '1.2rem' }}>
@@ -93,7 +116,11 @@ function HomePage({ onNavigate }) {
         
         <label>
           Active Event
-          <input value={loading && !selectedEvent ? "Loading event..." : DEFAULT_EVENT_LABEL} readOnly style={{ opacity: 0.9 }} />
+          <input
+            value={loading && !activeEvent ? "Loading event..." : formatEventLabel(activeEvent)}
+            readOnly
+            style={{ opacity: 0.9 }}
+          />
         </label>
 
         {error && (
