@@ -10,6 +10,8 @@ const initialState = {
   intakeType: "None",
   shooterCount: "1",
   turret: "No",
+  maxBallsInHopper: "",
+  cycleTimeSec: "",
   climbLevel: "None",
   autoSummary: "",
   teleopSummary: "",
@@ -118,6 +120,31 @@ function PitScoutPage() {
             <option value="No">No</option>
             <option value="Yes">Yes</option>
           </select>
+        </label>
+
+        <label>
+          Max Total Balls in Hopper
+          <input
+            type="number"
+            min="0"
+            name="maxBallsInHopper"
+            value={form.maxBallsInHopper}
+            onChange={updateField}
+            inputMode="numeric"
+          />
+        </label>
+
+        <label>
+          Cycle Time (sec)
+          <input
+            type="number"
+            min="0"
+            step="0.1"
+            name="cycleTimeSec"
+            value={form.cycleTimeSec}
+            onChange={updateField}
+            inputMode="decimal"
+          />
         </label>
       </div>
 

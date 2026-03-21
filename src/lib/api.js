@@ -48,6 +48,8 @@ export function submitPitScout(payload) {
       payload.canUnderTrench,
       payload.intakeType,
       scoringMechanisms,
+      payload.maxBallsInHopper,
+      payload.cycleTimeSec,
       payload.climbLevel,
       payload.autoSummary,
       payload.teleopSummary,
