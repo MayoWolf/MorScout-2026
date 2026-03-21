@@ -35,6 +35,8 @@ async function callApi(path, body) {
 }
 
 export function submitPitScout(payload) {
+  const scoringMechanisms = `${payload.shooterCount || "1"} shooter${payload.shooterCount === "1" ? "" : "s"}, Turret: ${payload.turret || "No"}`;
+
   return callApi("/api/sheets-write", {
     sheetName: "PitScouting",
     row: [
@@ -45,7 +47,7 @@ export function submitPitScout(payload) {
       payload.canCrossBumps,
       payload.canUnderTrench,
       payload.intakeType,
-      payload.scoringMechanisms,
+      scoringMechanisms,
       payload.climbLevel,
       payload.autoSummary,
       payload.teleopSummary,

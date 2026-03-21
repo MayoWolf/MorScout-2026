@@ -3,6 +3,7 @@ import { fetchEvents, fetchEventMatches } from "../lib/api";
 
 const DEFAULT_EVENT_NAME = "2026 CA District Los Angeles Event";
 const DEFAULT_EVENT_CITY = "El Segundo";
+const DEFAULT_EVENT_LABEL = `${DEFAULT_EVENT_NAME} (${DEFAULT_EVENT_CITY})`;
 
 function HomePage({ onNavigate }) {
   const [events, setEvents] = useState([]);
@@ -71,15 +72,16 @@ function HomePage({ onNavigate }) {
     }
   }
 
-  async function onSelectEvent(e) {
-    await syncSelectedEvent(e.target.value);
-  }
-
   useEffect(() => {
-    if (selectedEvent || events.length === 0) return;
+    if (events.length === 0) return;
 
     const defaultEvent = findDefaultEvent(events);
-    if (defaultEvent) {
+    if (!defaultEvent) {
+      setError(`Could not find ${DEFAULT_EVENT_LABEL}.`);
+      return;
+    }
+
+    if (selectedEvent !== defaultEvent.key) {
       syncSelectedEvent(defaultEvent.key);
     }
   }, [events, selectedEvent]);
@@ -90,15 +92,8 @@ function HomePage({ onNavigate }) {
         <h3 style={{ fontSize: '0.9rem', marginBottom: '0.8rem' }}>📍 Competition Context</h3>
         
         <label>
-          Select Event
-          <select value={selectedEvent} onChange={onSelectEvent} disabled={loading}>
-            <option value="">{loading ? "Loading Events..." : "-- Choose Event --"}</option>
-            {events.map(ev => (
-              <option key={ev.key} value={ev.key}>
-                {ev.year} {ev.name} ({ev.city})
-              </option>
-            ))}
-          </select>
+          Active Event
+          <input value={loading && !selectedEvent ? "Loading event..." : DEFAULT_EVENT_LABEL} readOnly style={{ opacity: 0.9 }} />
         </label>
 
         {error && (

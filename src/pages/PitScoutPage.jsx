@@ -8,7 +8,8 @@ const initialState = {
   canCrossBumps: "No",
   canUnderTrench: "No",
   intakeType: "None",
-  scoringMechanisms: "",
+  shooterCount: "1",
+  turret: "No",
   climbLevel: "None",
   autoSummary: "",
   teleopSummary: "",
@@ -101,10 +102,24 @@ function PitScoutPage() {
         </label>
       </div>
 
-      <label>
-        Scoring Mechanisms
-        <input name="scoringMechanisms" value={form.scoringMechanisms} onChange={updateField} placeholder="e.g. High shooter, Low dumper" />
-      </label>
+      <div className="inline-grid">
+        <label>
+          How Many Shooters
+          <select name="shooterCount" value={form.shooterCount} onChange={updateField}>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
+        </label>
+
+        <label>
+          Turret
+          <select name="turret" value={form.turret} onChange={updateField}>
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>
+          </select>
+        </label>
+      </div>
 
       <label>
         Auto Capabilities
