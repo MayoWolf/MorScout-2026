@@ -48,13 +48,13 @@ export function submitPitScout(payload) {
       payload.canUnderTrench,
       payload.intakeType,
       scoringMechanisms,
-      payload.maxBallsInHopper,
-      payload.cycleTimeSec,
       payload.climbLevel,
       payload.autoSummary,
       payload.teleopSummary,
       payload.reliability,
-      payload.comments
+      payload.comments,
+      payload.maxBallsInHopper,
+      payload.cycleTimeSec
     ]
   });
 }
