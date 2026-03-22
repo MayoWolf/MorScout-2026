@@ -359,16 +359,21 @@ table {
   border-collapse: collapse;
 }
 
+th,
 td {
   border-bottom: 1px solid var(--glass-border);
   padding: 1rem;
   font-size: 0.9rem;
+  text-align: left;
 }
 
-thead td {
+th {
   font-weight: 700;
   color: var(--accent);
   background: rgba(255, 255, 255, 0.02);
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(12px);
 }
 
 .bottom-nav {

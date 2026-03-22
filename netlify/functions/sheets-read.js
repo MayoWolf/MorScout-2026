@@ -41,7 +41,7 @@ exports.handler = async (event) => {
 
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range: range || `${sheetName}!A1:Z1000`
+      range: range || `${sheetName}!A1:AZ2000`
     });
 
     return {

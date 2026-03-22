@@ -111,6 +111,7 @@ export function loadRankings() {
 
 export function loadMatchScoutingRows() {
   return callApi("/api/sheets-read", {
-    sheetName: "MatchScouting"
+    sheetName: "MatchScouting",
+    range: "A1:AZ2000"
   });
 }
