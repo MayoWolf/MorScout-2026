@@ -21,6 +21,18 @@ function getIndex(headerMap, aliases) {
     }
   }
 
+  const headers = Object.keys(headerMap);
+
+  for (const alias of aliases) {
+    const fuzzyMatch = headers.find(
+      (header) => header.includes(alias) || alias.includes(header)
+    );
+
+    if (fuzzyMatch) {
+      return headerMap[fuzzyMatch];
+    }
+  }
+
   return -1;
 }
 
@@ -48,15 +60,15 @@ function buildRankings(rawRows) {
 
   const columns = {
     team: getIndex(headerMap, ["teamnumber", "team"]),
-    matchNumber: getIndex(headerMap, ["matchnumber"]),
-    autoFuelScored: getIndex(headerMap, ["autofuelscored"]),
-    autoTowerLevel1: getIndex(headerMap, ["autotowerlevel1"]),
-    teleopFuelScored: getIndex(headerMap, ["teleopfuelscored"]),
-    teleopTowerLevel: getIndex(headerMap, ["teleoptowerlevel"]),
-    fieldAwareness: getIndex(headerMap, ["fieldawareness15", "fieldawareness"]),
-    playedDefense: getIndex(headerMap, ["playeddefense"]),
-    defenseEffectiveness: getIndex(headerMap, ["defenseeffectiveness"]),
-    reliabilityScore: getIndex(headerMap, ["reliabilityscore05", "reliabilityscore"])
+    matchNumber: getIndex(headerMap, ["matchnumber", "match"]),
+    autoFuelScored: getIndex(headerMap, ["autofuelscored", "autofuelmade", "autofuelattempted"]),
+    autoTowerLevel1: getIndex(headerMap, ["autotowerlevel1", "towerlevel1auto"]),
+    teleopFuelScored: getIndex(headerMap, ["teleopfuelscored", "teleopfuelmade", "teleopfuelattempted"]),
+    teleopTowerLevel: getIndex(headerMap, ["teleoptowerlevel", "towerlevelteleop"]),
+    fieldAwareness: getIndex(headerMap, ["fieldawareness15", "fieldawareness", "awareness"]),
+    playedDefense: getIndex(headerMap, ["playeddefense", "defenseplayed"]),
+    defenseEffectiveness: getIndex(headerMap, ["defenseeffectiveness", "defenserating"]),
+    reliabilityScore: getIndex(headerMap, ["reliabilityscore05", "reliabilityscore", "reliability"])
   };
 
   const missingColumns = Object.entries(columns)
