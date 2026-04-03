@@ -19,8 +19,8 @@ npm install
 2. Create `.env` from `.env.example` and fill values.
 
 3. Create these sheet tabs in your Google Sheet:
-- `PitScouting`
-- `MatchScouting`
+- `PS(CAASV)`
+- `MS(CAASV)`
 
 4. Share the sheet with your Google service account email as **Editor**.
 
@@ -40,7 +40,7 @@ Detailed instructions for setting up the Google Sheet and Service Account can be
 
 Ensure your Google Sheet tabs have these exact columns in row 1:
 
-### PitScouting
+### PS(CAASV)
 1. Timestamp
 2. Scout
 3. Team
@@ -55,7 +55,7 @@ Ensure your Google Sheet tabs have these exact columns in row 1:
 12. Reliability
 13. Comments
 
-### MatchScouting
+### MS(CAASV)
 1. Timestamp
 2. Scout
 3. MatchNumber

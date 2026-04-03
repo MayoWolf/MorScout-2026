@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { fetchEvents, fetchEventMatches } from "../lib/api";
 
-const DEFAULT_EVENT_KEY = "2026calas";
-const DEFAULT_EVENT_CODE = "calas";
-const DEFAULT_EVENT_LABEL = "CA District Los Angeles Event";
+const DEFAULT_EVENT_KEY = "2026caasv";
+const DEFAULT_EVENT_CODE = "caasv";
+const DEFAULT_EVENT_LABEL = "CA District Aerospace Valley Event";
 
 function formatEventLabel(event) {
   if (!event) {
@@ -13,7 +13,7 @@ function formatEventLabel(event) {
   return event.city ? `${event.name} (${event.city})` : event.name;
 }
 
-function isLosAngelesEvent(event) {
+function isAerospaceValleyEvent(event) {
   const key = String(event.key || "").toLowerCase();
   const eventCode = String(event.event_code || "").toLowerCase();
   const name = String(event.name || "").toLowerCase();
@@ -21,7 +21,7 @@ function isLosAngelesEvent(event) {
   return (
     key === DEFAULT_EVENT_KEY ||
     eventCode === DEFAULT_EVENT_CODE ||
-    name.includes("district los angeles event")
+    name.includes("district aerospace valley event")
   );
 }
 
@@ -68,7 +68,7 @@ function HomePage({ onNavigate }) {
   }, []);
 
   function findDefaultEvent(eventList) {
-    return eventList.find(isLosAngelesEvent);
+    return eventList.find(isAerospaceValleyEvent);
   }
 
   async function syncSelectedEvent(key) {

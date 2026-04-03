@@ -38,7 +38,7 @@ export function submitPitScout(payload) {
   const scoringMechanisms = `${payload.shooterCount || "1"} shooter${payload.shooterCount === "1" ? "" : "s"}, Turret: ${payload.turret || "No"}`;
 
   return callApi("/api/sheets-write", {
-    sheetName: "PitScouting",
+    sheetName: "PS(CAASV)",
     row: [
       new Date().toISOString(),
       payload.scout,
@@ -61,7 +61,7 @@ export function submitPitScout(payload) {
 
 export function submitMatchScout(payload) {
   return callApi("/api/sheets-write", {
-    sheetName: "MatchScouting",
+    sheetName: "MS(CAASV)",
     row: [
       new Date().toISOString(),
       payload.scout,
@@ -111,6 +111,6 @@ export function loadRankings() {
 
 export function loadMatchScoutingRows() {
   return callApi("/api/sheets-read", {
-    sheetName: "MatchScouting"
+    sheetName: "MS(CAASV)"
   });
 }

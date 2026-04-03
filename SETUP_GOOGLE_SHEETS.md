@@ -3,8 +3,8 @@
 ## 1. Create spreadsheet
 
 Create a Google Sheet and add these tabs:
-- `PitScouting`
-- `MatchScouting`
+- `PS(CAASV)`
+- `MS(CAASV)`
 
 Add header rows in row 1 with the exact column names specified in the README.
 
